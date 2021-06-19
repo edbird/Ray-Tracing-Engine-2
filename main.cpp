@@ -87,35 +87,35 @@ int main(int argc, char* argv[])
     */
     
 
-    Bitmap bitmap;
+    Bitmap mario_bitmap;
     std::string path_mario("./res/mario.bmp");
-    bitmap.Read(path_mario);
+    mario_bitmap.Read(path_mario);
 
     std::string path_mario_out_1("./res/mario1.bmp");
-    bitmap.Write(path_mario_out_1);
+    mario_bitmap.Write(path_mario_out_1);
 
-    std::cout << "bitmap.height=" << bitmap.height
-              << " bitmap.width=" << bitmap.width << std::endl;
-    for(int j = 0; j < bitmap.height; ++ j)
+    std::cout << "bitmap.height=" << mario_bitmap.height
+              << " bitmap.width=" << mario_bitmap.width << std::endl;
+    for(int j = 0; j < mario_bitmap.height; ++ j)
     {
-        for(int i = 0; i < bitmap.width; ++ i)
+        for(int i = 0; i < mario_bitmap.width; ++ i)
         {
             unsigned char r;
             unsigned char g;
             unsigned char b;
-            bitmap.GetPixel(i, j, r, g, b);
+            mario_bitmap.GetPixel(i, j, r, g, b);
 
             if(r == 0 && g == 255 && b == 0)
             {
                 g = 0;
-                bitmap.SetPixel(i, j, r, g, b);
+                mario_bitmap.SetPixel(i, j, r, g, b);
             }
         }
     }
 
     std::string path_mario_out = "./res/mario_out.bmp";
     std::cout << "Writing bitmap image to file: " << path_mario_out << std::endl;
-    bitmap.Write(path_mario_out);
+    mario_bitmap.Write(path_mario_out);
 
 
     ////////////////////////////////////////////////////////////////////////////
@@ -124,6 +124,7 @@ int main(int argc, char* argv[])
     std::cout << "Render begin" << std::endl;
 
     Scene scene;
+    scene.RegisterTexture("mario", mario_bitmap);
     scene.Build();
 
     //Bitmap bitmap;

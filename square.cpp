@@ -60,6 +60,9 @@ Hit Square::Intersect(const Ray& ray)
         if(this->checker_pattern_enable)
             apply_checker(p, material_copy);
 
+        if(this->texture_enable)
+            apply_texture(p, material_copy);
+
         hit.distance = t;
         hit.position = p;
         hit.normal = n1;
@@ -118,6 +121,9 @@ Hit Square::Intersect(const Ray& ray)
     {
         if(this->checker_pattern_enable)
             apply_checker(p, material_copy);
+
+        if(this->texture_enable)
+            apply_texture(p, material_copy);
 
         hit.distance = t;
         hit.position = p;

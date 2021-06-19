@@ -14,6 +14,8 @@
 
 #include <vector>
 
+#include <map>
+
 
 class Scene
 {
@@ -34,6 +36,11 @@ class Scene
     void getFirstIntersect(Hit &nearest_hit, const Ray& ray);
 
     void Render(Bitmap &bitmap);
+
+    void RegisterTexture(const std::string texture_string, Bitmap &bitmap)
+    {
+        texture_map[texture_string] = bitmap;
+    }
 
 
     // used in while loop to emulate recursion without heavy stack use
@@ -70,6 +77,8 @@ class Scene
     // single camera
     CameraSimple camera;
 
+    // texture maps
+    std::map<std::string, Bitmap> texture_map;
 
 
 };

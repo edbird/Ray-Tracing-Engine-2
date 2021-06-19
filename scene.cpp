@@ -79,17 +79,17 @@ void Scene::Build()
     diffuse_material_white.color = ColorWide(0.0f, 1.0f, 1.0f, 1.0f, 0.0f);
 
     Material diffuse_material_green;
-    diffuse_material_white.color = ColorWide(0.0f, 0.0f, 1.0f, 0.0f, 0.0f);
+    diffuse_material_green.color = ColorWide(0.0f, 0.0f, 1.0f, 0.0f, 0.0f);
 
     Material diffuse_material_red;
-    diffuse_material_white.color = ColorWide(0.0f, 1.0f, 0.0f, 0.0f, 0.0f);
+    diffuse_material_red.color = ColorWide(0.0f, 1.0f, 0.0f, 0.0f, 0.0f);
 
     Material diffuse_material_blue;
-    diffuse_material_white.color = ColorWide(0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+    diffuse_material_blue.color = ColorWide(0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 
     Material diffuse_material_white_thin;
     diffuse_material_white_thin.SetThin(true, 0.3f);
-    diffuse_material_white.color = ColorWide(0.0f, 1.0f, 1.0f, 1.0f, 0.0f);
+    diffuse_material_white_thin.color = ColorWide(0.0f, 1.0f, 1.0f, 1.0f, 0.0f);
 
     Material diffuse_material_grey;
     diffuse_material_grey.color = ColorWide(0.0f, 0.8f, 0.8f, 0.8f, 0.0f);
@@ -209,6 +209,21 @@ void Scene::Build()
                                         diffuse_material_grey));
         Square *the_square = dynamic_cast<Square*>(objects.back());
         the_square->SetCheckerPattern(true);
+    }
+
+    // Mario
+    if(1)
+    {
+        float x1 = 0.0f;    float x2 = 1.0f;
+        float z1 = 0.0f;    float z2 = -1.0f;
+        float y = 0.02f;
+        Square *the_mario_square = new Square(  geom::vec3f(x1, y, z1),
+                                                geom::vec3f(x2, y, z1),
+                                                geom::vec3f(x2, y, z2),
+                                                geom::vec3f(x1, y, z2),
+                                                diffuse_material_blue);
+        the_mario_square->SetTexture(texture_map["mario"]);
+        objects.push_back(the_mario_square);
     }
 
     // left

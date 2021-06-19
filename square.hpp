@@ -8,6 +8,8 @@
 #include "geom.hpp"
 #include "hit.hpp"
 
+#include "bitmap.hpp"
+
 
 class Square : public Intersectable
 {
@@ -34,6 +36,7 @@ class Square : public Intersectable
             const Material &material)
         : Intersectable(material)
         , checker_pattern_enable(false)
+        , texture_enable(false)
     {
         this->p1 = p1;
         this->p2 = p2;
@@ -84,11 +87,45 @@ class Square : public Intersectable
         }
     }
 
+    void apply_texture(const geom::vec3f &hit_position, Material &material_copy)
+    {
+        // set the color of the hit depending on the position
+        geom::vec3f x_unit_vector = (p2 - p1).unit();
+        float x_coord = dot(hit_position - p1, x_unit_vector);
+        
+        geom::vec3f y_unit_vector = cross(n1, x_unit_vector);
+        float y_coord = dot(hit_position - p1, y_unit_vector);
+
+        int x = (int)(x_coord / 0.05f); // TODO: change this to a member variable, it describes the size of the texture/checkerboard
+        int y = (int)(y_coord / 0.05f); // same as above
+        
+        if(x >= 0 && x < texture.width)
+        {
+            if(y >= 0 && y < texture.height)
+            {
+                unsigned char r, g, b;
+                texture.GetPixel(x, y, r, g, b);
+                float rr = (float)(r) / 255.f;
+                float gg = (float)(g) / 255.f;
+                float bb = (float)(b) / 255.f;
+                material_copy.color = ColorWide(0.f, rr, gg, bb, 0.f);
+            }
+        }
+    }
+
+
+    void SetTexture(Bitmap &bitmap)
+    {
+        this->texture = bitmap;
+        texture_enable = true;
+    }
+
 
     private:
 
     bool checker_pattern_enable;
-
+    bool texture_enable;
+    Bitmap texture;
 
 };
 
