@@ -96,7 +96,7 @@ void CameraSimple::SetLookAtPosition(const geom::vec3f lookat_position)
     SetLookAtDirection(lookat_direction);
 }
 
-
+/*
 void CameraSimple::SetLookAtDirection(const geom::vec3f lookat_direction)
 { 
     // invalidates
@@ -181,6 +181,111 @@ void CameraSimple::SetLookAtDirection(const geom::vec3f lookat_direction)
     std::cout << "next_right=" << next_right << std::endl;
     std::cout << "next_right.length()=" << next_right.length() << std::endl;
 
+
+    this->up = next_up;
+    this->right = next_right;
+    this->lookat_direction = next_lookat_direction;
+
+    // set the relative screen position
+    this->screen_relative_position = distance_to_screen * next_lookat_direction;
+
+}
+*/
+
+void CameraSimple::SetLookAtDirection(const geom::vec3f lookat_direction)
+{ 
+    // invalidates
+    // up
+    // right
+    // lookat_direction
+    // screen_relative_position
+
+
+    // ensure the lookat direction is a unit vector, copy to local
+    geom::vec3f next_lookat_direction = lookat_direction.unit();
+    std::cout << "next_lookat_direction=" << next_lookat_direction << std::endl;
+
+    // this is the same as ProjectXZ() / CrushY()
+    // take only the XZ components
+    geom::vec3f next_lookat_direction_projected = next_lookat_direction.ProjectXZ(); // CrushY()
+    std::cout << "next_lookat_direction_projected=" << next_lookat_direction_projected << std::endl;
+
+    // if Z, X components are 0 the phi angle is indeterminate
+    // this will blow up if the projected length is 0
+    //geom::vec3f lookat_relative_flat_unit = lookat_relative_flat.unit();
+    // instead we take this approach:
+    // compute the sin and cosine of the angle theta from the y unit vector
+    float cos_theta = next_lookat_direction.y;
+    float sin_theta = next_lookat_direction_projected.length();
+    std::cout << "cos_theta=" << cos_theta << std::endl;
+    std::cout << "sin_theta=" << sin_theta << std::endl;
+
+    std::cout << "theta=" << rad_to_deg(std::acos(cos_theta)) << std::endl;
+    std::cout << "theta=" << rad_to_deg(std::asin(sin_theta)) << std::endl;
+
+    geom::vec3f next_lookat_direction_projected_unit;
+    float cos_phi = 0.0f;
+    float sin_phi = 0.0f;
+    if(geom::unit_safe(next_lookat_direction_projected_unit, next_lookat_direction_projected) == 0)
+    {
+        // no error
+        cos_phi = next_lookat_direction_projected_unit.z;
+        sin_phi = next_lookat_direction_projected_unit.x;
+        std::cout << "cos_phi=" << cos_phi << std::endl;
+        std::cout << "sin_phi=" << sin_phi << std::endl;
+    }
+    else
+    {
+
+        geom::vec3f previous_lookat_direction = this->lookat_direction;
+
+        // project XZ
+        geom::vec3f previous_lookat_direction_projected = previous_lookat_direction.ProjectXZ();
+
+        // the rotation of the camera about the y axis is not determined,
+        // retain the previous value, if the previous value is determined
+        geom::vec3f previous_lookat_direction_projected_unit;
+        if(geom::unit_safe(previous_lookat_direction_projected_unit, previous_lookat_direction_projected) == 0)
+        {
+            cos_phi = previous_lookat_direction_projected_unit.z;
+            sin_phi = previous_lookat_direction_projected_unit.x;
+        }
+        else
+        {
+            // the rotation of the camera about the y axis before the new
+            // lookat vector is applied was also not determinte... use
+            // a default value of 0.0f
+
+            // default value already set on initialization
+            cos_phi = 0.f;
+            sin_phi = 0.f;
+        }
+    }
+
+    std::cout << "phi=" << rad_to_deg(std::acos(cos_phi)) << std::endl;
+    std::cout << "phi=" << rad_to_deg(std::asin(sin_phi)) << std::endl;
+
+    // new vector which I imagined in my head
+    float n_x = -cos_theta * sin_phi;
+    float n_y = sin_theta;
+    float n_z = -cos_theta * cos_phi;
+
+    geom::vec3f next_up(n_x, n_y, n_z);
+    std::cout << "next_up=" << next_up << std::endl;
+    std::cout << "next_up.length()=" << next_up.length() << std::endl;
+
+    geom::vec3f next_right = geom::cross(next_lookat_direction, next_up); // TODO: this obtains wrong direction of unit vector?
+    std::cout << "next_right=" << next_right << std::endl;
+    std::cout << "next_right.length()=" << next_right.length() << std::endl;
+
+    // new vector which I imagined in my head
+    float r_x = -cos_phi;
+    float r_y = 0.0f;
+    float r_z = sin_phi;
+
+    geom::vec3f other_next_right(r_x, r_y, r_z);
+    std::cout << "other_next_right=" << next_right << std::endl;
+    std::cout << "other_next_right.length()=" << next_right.length() << std::endl;
 
     this->up = next_up;
     this->right = next_right;
