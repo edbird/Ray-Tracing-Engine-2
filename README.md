@@ -4,3 +4,7 @@ Ray Tracing Engine Version 2
 Licence:
 
 Work featured in this repository may be used in full or in part for non-commercial purposes.
+
+Example:
+
+![render](./saved-renders/render_mario.bmp)
