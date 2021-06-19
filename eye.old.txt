@@ -1,0 +1,58 @@
+
+/*
+class Eye
+{
+
+    public:
+
+    Eye()
+        : pos(0.0f, 0.0f, 0.0f)
+        , dir(0.0f, 0.0f, -1.0f)
+    {
+
+    }
+
+    Eye(geom::vec3f pos, geom::vec3f dir)
+        : pos(pos)
+        , dir(dir)
+    {
+        dir.normalize();
+        lookat = pos + dir;
+    }
+
+    void SetPos(geom::vec3f pos)
+    {
+        this->pos = pos;
+    }
+
+    void SetDir(geom::vec3f dir)
+    {
+        this->dir = dir.unit();
+        lookat = pos + dir;
+    }
+
+    void SetLookAt(geom::vec3f lookat)
+    {
+        this->lookat = lookat;
+        geom::vec3f diff = lookat - pos;
+        dir = diff.unit();
+    }
+
+    geom::vec3f GetPos() const
+    {
+        return pos;
+    }
+
+    geom::vec3f GetDir() const
+    {
+        return dir;
+    }
+
+
+    protected:
+
+    geom::vec3f pos;
+    geom::vec3f dir;
+    geom::vec3f lookat; // might not use this
+};
+*/
